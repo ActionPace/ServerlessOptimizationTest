@@ -1,0 +1,3 @@
+requests
+# List all python libraries for the lambda
+transformers[torch]==4.1.1

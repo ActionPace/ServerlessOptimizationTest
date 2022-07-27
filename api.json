@@ -1,0 +1,36 @@
+{'version': '2.0', 
+'routeKey': 'POST /inference', 
+'rawPath': '/inference', 
+'rawQueryString': '', 
+'headers': 
+    {'accept': '*/*', 
+    'content-length': '632', 
+    'content-type': 'application/json', 
+    'host': 'ke3awi7v7j.execute-api.us-east-1.amazonaws.com', 
+    'user-agent': 'curl/7.68.0', 
+    'x-amzn-trace-id': 'Root=1-62d898b2-19b8c1a45e9c3fb40c103dc5', 
+    'x-forwarded-for': '96.255.44.150', 
+    'x-forwarded-port': '443', 
+    'x-forwarded-proto': 'https'
+    }, 
+'requestContext': 
+    {'accountId': '186364758517', 
+    'apiId': 'ke3awi7v7j', 
+    'domainName': 'ke3awi7v7j.execute-api.us-east-1.amazonaws.com', 
+    'domainPrefix': 'ke3awi7v7j', 
+    'http': 
+        {'method': 'POST', 
+        'path': '/inference', 
+        'protocol': 'HTTP/1.1', 
+        'sourceIp': '96.255.44.150', 
+        'userAgent': 'curl/7.68.0'
+        }, 
+    'requestId': 'VlzL7ik-oAMEM-Q=', 
+    'routeKey': 'POST /inference', 
+    'stage': '$default', 
+    'time': '21/Jul/2022:00:07:14 +0000', 
+    'timeEpoch': 1658362034579
+    }, 
+    'body': '{"question": "When was the car invented?","context": "Cars came into global use during the 20th century, and developed economies depend on them. The year 1886 is regarded as the birth year of the modern car when German inventor Karl Benz patented his Benz Patent-Motorwagen. Cars became widely available in the early 20th century. One of the first cars accessible to the masses was the 1908 Model T, an American car manufactured by the Ford Motor Company. Cars were rapidly adopted in the US, where they replaced animal-drawn carriages and carts, but took much longer to be accepted in Western Europe and other parts of the world."}', 
+    'isBase64Encoded': False
+}

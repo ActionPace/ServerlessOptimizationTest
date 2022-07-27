@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  python3.8
+
+  server-info-x86-ubuntu22.04
+
+Globals:
+  Function:
+    Timeout: 7
+
+Resources:
+  ServerInfoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Architectures:
+        - arm64
+      Events:
+        ServerInfo:
+          Type: Api
+          Properties:
+            Path: /serverinfo
+            Method: get
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: ./server_info
+      DockerTag: ubuntu22.04arm-v1
+
+Outputs:
+  ServerInfoApi:
+    Description: "API Gateway endpoint URL for Prod stage for Server Info function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+  ServerInfoFunction:
+    Description: "Server Info Lambda Function ARN"
+    Value: !GetAtt ServerInfoFunction.Arn
+  ServerInfoFunctionIamRole:
+    Description: "Implicit IAM Role created for Server Info function"
+    Value: !GetAtt ServerInfoFunctionRole.Arn

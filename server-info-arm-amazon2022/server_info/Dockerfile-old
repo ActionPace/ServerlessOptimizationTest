@@ -1,0 +1,32 @@
+# amazonlinus2022
+FROM --platform=linux/arm64/v8 docker.io/arm64v8/amazonlinux:2022.0.20220531.0
+
+ARG FUNCTION_DIR="/home/app/"
+
+WORKDIR ${FUNCTION_DIR}
+
+COPY requirements.txt ${FUNCTION_DIR}
+
+RUN yum -y update && yum -y install \
+  gcc \
+  python3-pip \
+  wget \
+  tar \
+  gzip \
+  && yum clean all && rm -rf /var/cache \
+  && cd /tmp && wget https://github.com/simplejson/simplejson/archive/refs/tags/v3.17.2.tar.gz \
+  && tar zxvf v3.17.2.tar.gz && cd simplejson-3.17.2 \
+  && python3 setup.py install && cd && rm -Rf /tmp/simplejson-3.17.2 /tmp/v3.17.2.tar.gz \
+  && rm -Rf ~/.cache/pip
+
+
+RUN python3 -m pip install -r requirements.txt -t . && python3 -m pip install awslambdaric --target ${FUNCTION_DIR}
+
+COPY app.py ${FUNCTION_DIR}
+
+ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/download/v1.6/aws-lambda-rie-arm64 /usr/bin/aws-lambda-rie
+COPY entry.sh /
+RUN chmod 755 /usr/bin/aws-lambda-rie /entry.sh
+ENTRYPOINT [ "/entry.sh" ]
+
+CMD ["app.lambda_handler"]

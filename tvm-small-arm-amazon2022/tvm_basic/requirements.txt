@@ -1,0 +1,2 @@
+requests
+#awslambdaric==2.0.4

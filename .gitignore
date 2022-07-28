@@ -1,3 +1,4 @@
 **/samconfig.toml
 **/tests/
 **/event.json
+**/**/aws_url.txt

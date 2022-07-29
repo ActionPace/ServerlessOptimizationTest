@@ -17,7 +17,9 @@ def lambda_handler(event, context):
 
     input_text = body['input_text']
 
-    type = runprocess("gcc -march=native -Q --help=target|grep march|grep -v 'Known valid'|awk '{print $2}'")
+    #type = runprocess("gcc -march=native -Q --help=target|grep march|grep -v 'Known valid'|awk '{print $2}'")
+    type = runprocess("cat /proc/cpuinfo | grep 'model name' | tail -1 | cut -d':' -f2 | xargs")
+    #type = runprocess("lscpu | grep 'Model name' | cut -d':' -f2 | xargs")
     cores = runprocess("getconf _NPROCESSORS_ONLN")
     osname=runprocess("cat /etc/os-release | grep '^NAME=' | cut -d'=' -f2 | tr -d '\"'")
     osversion=runprocess("cat /etc/os-release | grep 'VERSION=' | cut -d'=' -f2 | tr -d '\"'")

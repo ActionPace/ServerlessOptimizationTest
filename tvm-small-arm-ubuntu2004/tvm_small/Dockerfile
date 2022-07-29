@@ -1,11 +1,12 @@
 # From local docker image
-FROM docker.io/library/amazonlinux:2.0.20220606.1 as build
+FROM --platform=linux/arm64/v8 docker.io/arm64v8/ubuntu:focal-20220531 as build
 
 RUN yum -y update && yum -y install curl tar gzip 
 
-ARG APPS_FILE="progs-installed-Amazon2-x86-basic-ext.tar.gz"
-ARG UTILS_FILE="installed-python-llvm.tar.gz"
+ARG UTILS_FILE="installedUBARM-python-llvm.tar.gz"
+ARG APPS_FILE="installedUBARM-2004-aarch-ext-complete.tar.gz"
 ARG ENV_FILE="env-scripts-all-07252022.tar.gz"
+ARG SSL_FILE="libssl1.1_1.1.1f-1ubuntu2.16_arm64.deb"
 
 WORKDIR /root
 COPY aws_url.txt .
@@ -18,12 +19,17 @@ RUN curl -s "$(cat /root/aws_url.txt)${UTILS_FILE}" | tar zvx -C .
 WORKDIR /envscript
 RUN curl -s "$(cat /root/aws_url.txt)${ENV_FILE}" | tar zvx -C .
 
-FROM docker.io/library/amazonlinux:2.0.20220606.1
+WORKDIR /tmp
+RUN curl "$(cat /root/aws_url.txt)${SSL_FILE}" --output ${SSL_FILE}
 
-ARG FOLDER_NAME="installed"
-ARG SCRIPT_NAME="env.sh"
+FROM --platform=linux/arm64/v8 docker.io/arm64v8/ubuntu:focal-20220531
+
+ARG FOLDER_NAME="installedUBARM"
+ARG SCRIPT_NAME="envUBARM.sh"
 ARG FUNCTION_DIR="/home/app/"
-ENV TRANSFORMERS_CACHE='/home/app/huggingface'
+ENV TRANSFORMERS_CACHE="/home/app/huggingface"
+ARG SSL_FILE="libssl1.1_1.1.1f-1ubuntu2.16_arm64.deb"
+ARG ARCH_RIE="arm" # "arm" or "x86_"
 
 WORKDIR /envscript
 COPY --from=build /envscript/${SCRIPT_NAME} ./env.sh
@@ -33,6 +39,11 @@ COPY --from=build /progs/${FOLDER_NAME} .
 
 WORKDIR /progs2/${FOLDER_NAME}
 COPY --from=build /progs2/${FOLDER_NAME} .
+
+WORKDIR /tmp
+COPY --from=build /tmp/${SSL_FILE} .
+RUN dpkg -i ${SSL_FILE} \
+&& rm ${SSL_FILE} 
 
 WORKDIR ${FUNCTION_DIR}
 COPY requirements.txt ${FUNCTION_DIR}
@@ -45,9 +56,7 @@ RUN . /envscript/env.sh \
 && python3 prepare.py && rm /home/app/huggingface/* \
 && python3 prepare2.py
 
-COPY app.py ${FUNCTION_DIR}
-
-ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/download/v1.6/aws-lambda-rie-x86_64 /usr/bin/aws-lambda-rie
+ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/download/v1.6/aws-lambda-rie-${ARCH_RIE}64 /usr/bin/aws-lambda-rie
 COPY entry.sh /
 RUN chmod 755 /usr/bin/aws-lambda-rie /entry.sh
 ENTRYPOINT [ "/entry.sh" ]

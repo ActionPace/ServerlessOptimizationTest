@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  tvm-basic-x86-ubuntu20.04
+  tvm-small-x86-ubuntu20.04
 
 Globals:
   Function:
@@ -9,7 +9,7 @@ Globals:
     MemorySize: 4096
 
 Resources:
-  TvmBasicFunction:
+  TvmSmallFunction:
     Type: AWS::Serverless::Function
     Properties:
       PackageType: Image
@@ -19,20 +19,20 @@ Resources:
         ServerInfo:
           Type: Api
           Properties:
-            Path: /tvmbasic
+            Path: /tvmsmall
             Method: get
     Metadata:
       Dockerfile: Dockerfile
-      DockerContext: ./tvm_basic
-      DockerTag: tvmbasicubuntu2004-v1
+      DockerContext: ./tvm_small
+      DockerTag: tvmsmallubuntu2004-v1
 
 Outputs:
-  TvmBasicApi:
-    Description: "API Gateway endpoint URL for Prod stage for Tvm Basic function"
+  TvmSmallApi:
+    Description: "API Gateway endpoint URL for Prod stage for Tvm Small function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  TvmBasicFunction:
-    Description: "Tvm Basic Lambda Function ARN"
-    Value: !GetAtt TvmBasicFunction.Arn
-  TvmBasicFunctionIamRole:
-    Description: "Implicit IAM Role created for Tvm Basic function"
-    Value: !GetAtt TvmBasicFunctionRole.Arn
+  TvmSmallFunction:
+    Description: "Tvm Small Lambda Function ARN"
+    Value: !GetAtt TvmSmallFunction.Arn
+  TvmSmallFunctionIamRole:
+    Description: "Implicit IAM Role created for Tvm Small function"
+    Value: !GetAtt TvmSmallFunctionRole.Arn

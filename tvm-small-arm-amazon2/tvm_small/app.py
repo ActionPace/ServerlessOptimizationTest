@@ -21,7 +21,7 @@ def lambda_handler(event, context):
     type = runprocess("cat /proc/cpuinfo | grep 'model name' | tail -1 | cut -d':' -f2 | xargs")
     #type = runprocess("lscpu | grep 'Model name' | cut -d':' -f2 | xargs")
     #arm
-    type = runprocess("lscpu | grep 'Arch' | cut -d':' -f2 | xargs")
+    #type = runprocess("lscpu | grep 'Arch' | cut -d':' -f2 | xargs")
     cores = runprocess("getconf _NPROCESSORS_ONLN")
     osname=runprocess("cat /etc/os-release | grep '^NAME=' | cut -d'=' -f2 | tr -d '\"'")
     osversion=runprocess("cat /etc/os-release | grep 'VERSION=' | cut -d'=' -f2 | tr -d '\"'")

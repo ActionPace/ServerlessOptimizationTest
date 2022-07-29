@@ -3,7 +3,7 @@ FROM --platform=linux/arm64/v8 docker.io/arm64v8/amazonlinux:2022.0.20220531.0 a
 
 RUN yum -y update && yum -y install curl tar gzip 
 
-ARG UTILS_FILE="installedARM-python-llvm.tar.gz "
+ARG UTILS_FILE="installedARM-python-llvm.tar.gz"
 ARG APPS_FILE="progs-installed-Amazon2022-aarch-basic-ext.tar.gz"
 ARG ENV_FILE="env-scripts-all-07252022.tar.gz"
 ARG SSL_FILE="lib-ssl-crypto-1.0.2k-ARM.tar.gz"
@@ -41,10 +41,12 @@ COPY --from=build /progs2/${FOLDER_NAME} .
 
 WORKDIR /usr/lib64
 COPY --from=build /missinglibs/lib*.so.1.0.2k-ARM ./
-RUN mv libssl.so.1.0.2k-ARM libssl.so.1.0.2k \
-&& mv libcrypto.so.1.0.2k-ARM libcrypto.so.1.0.2k \
-&& ln -s libssl.so.1.0.2k libssl.so.10 \
-&& ln -s libcrypto.so.1.0.2k libcrypto.so.10 \
+RUN yum -y install findutils \ 
+#find utils for xargs but seems to have libssl!
+#&& mv libssl.so.1.0.2k-ARM libssl.so.1.0.2k \
+#&& mv libcrypto.so.1.0.2k-ARM libcrypto.so.1.0.2k \
+#&& ln -s libssl.so.1.0.2k libssl.so.10 \
+#&& ln -s libcrypto.so.1.0.2k libcrypto.so.10 \
 && ln -s libcrypt.so.2 libcrypt.so.1
 
 WORKDIR ${FUNCTION_DIR}

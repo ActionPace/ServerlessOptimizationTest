@@ -1,12 +1,12 @@
 # From local docker image
 FROM --platform=linux/arm64/v8 docker.io/arm64v8/ubuntu:jammy-20220531 as build
 
-RUN yum -y update && yum -y install curl tar gzip 
+RUN apt -y update && apt-get -y install curl tar gzip 
 
 ARG UTILS_FILE="installedUBARM-python-llvm.tar.gz"
 ARG APPS_FILE="installedUBARM-2204-aarch-ext-complete.tar.gz"
 ARG ENV_FILE="env-scripts-all-07252022.tar.gz"
-ARG SSL_FILE="lib-ssl-crypto-1.0.2k-ARM.tar.gz"
+ARG SSL_FILE="libssl1.1_1.1.1f-1ubuntu2.16_arm64.deb"
 ARG FFI_FILE="libffi.so.7-UB-2004-aarch.tar.gz"
 
 WORKDIR /root
@@ -20,16 +20,17 @@ RUN curl -s "$(cat /root/aws_url.txt)${UTILS_FILE}" | tar zvx -C .
 WORKDIR /envscript
 RUN curl -s "$(cat /root/aws_url.txt)${ENV_FILE}" | tar zvx -C .
 
-WORKDIR /missinglibs
-RUN curl -s "$(cat /root/aws_url.txt)${SSL_FILE}" | tar zvx -C . \
+WORKDIR /tmp
+RUN curl "$(cat /root/aws_url.txt)${SSL_FILE}" --output ${SSL_FILE} \
 && curl -s "$(cat /root/aws_url.txt)${FFI_FILE}" | tar zvx -C . 
 
 FROM --platform=linux/arm64/v8 docker.io/arm64v8/ubuntu:jammy-20220531
 
-ARG FOLDER_NAME="installed"
-ARG SCRIPT_NAME="env.sh"
+ARG FOLDER_NAME="installedUBARM"
+ARG SCRIPT_NAME="envUBARM.sh"
 ARG FUNCTION_DIR="/home/app/"
 ENV TRANSFORMERS_CACHE="/home/app/huggingface"
+ARG SSL_FILE="libssl1.1_1.1.1f-1ubuntu2.16_arm64.deb"
 ARG FFI_FILE2="libffi.so.7"
 ARG ARCH="aarch" # "aarch" or "x86_"
 ARG ARCH_RIE="arm" # "arm" or "x86_"
@@ -43,12 +44,13 @@ COPY --from=build /progs/${FOLDER_NAME} .
 WORKDIR /progs2/${FOLDER_NAME}
 COPY --from=build /progs2/${FOLDER_NAME} .
 
-WORKDIR /usr/lib64
-COPY --from=build /missinglibs/* .
-COPY --from=build /tmp/${FFI_FILE2}-ARM ./${FFI_FILE2}
-RUN ln -s libssl.so.1.0.2k libssl.so.10 \
-&& ln -s libcrypto.so.1.0.2k libcrypto.so.10 \
-&& ln -s libcrypt.so.2 libcrypt.so.1 
+WORKDIR /tmp
+COPY --from=build /tmp/${SSL_FILE} .
+COPY --from=build /tmp/${FFI_FILE2}-ARM .
+RUN dpkg -i ${SSL_FILE} \
+&& rm ${SSL_FILE} \
+&& cp ${FFI_FILE2}-ARM /usr/lib/${ARCH}64-linux-gnu/${FFI_FILE2} \
+&& rm ${FFI_FILE2}-ARM
 
 WORKDIR ${FUNCTION_DIR}
 COPY requirements.txt ${FUNCTION_DIR}

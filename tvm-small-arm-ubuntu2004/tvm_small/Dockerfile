@@ -1,7 +1,7 @@
 # From local docker image
 FROM --platform=linux/arm64/v8 docker.io/arm64v8/ubuntu:focal-20220531 as build
 
-RUN yum -y update && yum -y install curl tar gzip 
+RUN apt -y update && apt-get -y install curl tar gzip 
 
 ARG UTILS_FILE="installedUBARM-python-llvm.tar.gz"
 ARG APPS_FILE="installedUBARM-2004-aarch-ext-complete.tar.gz"

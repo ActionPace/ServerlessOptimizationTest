@@ -20,7 +20,7 @@ Resources:
           Type: Api
           Properties:
             Path: /tvmsmall
-            Method: get
+            Method: post
     Metadata:
       Dockerfile: Dockerfile
       DockerContext: ./tvm_small

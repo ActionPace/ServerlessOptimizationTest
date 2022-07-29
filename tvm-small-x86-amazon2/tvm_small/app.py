@@ -12,10 +12,10 @@ loaded_model = torch.jit.load("traced_bert.pt")
 
 
 def lambda_handler(event, context):
-    
-    body = json.loads(event['body'])
+     
+    body = json.loads(event["body"])
 
-    input_text = body['input_text']
+    input_text = body["input_text"]
 
     #type = runprocess("gcc -march=native -Q --help=target|grep march|grep -v 'Known valid'|awk '{print $2}'")
     type = runprocess("cat /proc/cpuinfo | grep 'model name' | tail -1 | cut -d':' -f2 | xargs")

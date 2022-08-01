@@ -1,0 +1,2 @@
+export PATH=/progs2/installed/CMake-3.23.2/bin/:/progs2/installed/gcc-11.3.0/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+export LD_LIBRARY_PATH=/progs2/installed/gcc-11.3.0/lib64:/usr/lib64:/usr/lib

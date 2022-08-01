@@ -17,10 +17,10 @@ Resources:
         - x86_64
       Events:
         ServerInfo:
-          Type: Api
+          Type: HttpApi
           Properties:
             Path: /tvmbasic
-            Method: get
+            Method: post
     Metadata:
       Dockerfile: Dockerfile
       DockerContext: ./tvm_basic
@@ -29,7 +29,7 @@ Resources:
 Outputs:
   TvmBasicApi:
     Description: "API Gateway endpoint URL for Prod stage for Tvm Basic function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
   TvmBasicFunction:
     Description: "Tvm Basic Lambda Function ARN"
     Value: !GetAtt TvmBasicFunction.Arn

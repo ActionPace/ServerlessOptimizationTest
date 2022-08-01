@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  tvm-basic-arm-ubuntu20.04
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 4096
+
+Resources:
+  TvmBasicFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Architectures:
+        - arm64
+      Events:
+        ServerInfo:
+          Type: HttpApi
+          Properties:
+            Path: /tvmbasic
+            Method: post
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: ./tvm_basic
+      DockerTag: tvmbasicubuntu2004-v1
+
+Outputs:
+  TvmBasicApi:
+    Description: "API Gateway endpoint URL for Prod stage for Tvm Basic function"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+  TvmBasicFunction:
+    Description: "Tvm Basic Lambda Function ARN"
+    Value: !GetAtt TvmBasicFunction.Arn
+  TvmBasicFunctionIamRole:
+    Description: "Implicit IAM Role created for Tvm Basic function"
+    Value: !GetAtt TvmBasicFunctionRole.Arn

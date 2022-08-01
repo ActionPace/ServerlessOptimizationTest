@@ -2,6 +2,8 @@ import time, json, os, subprocess
 import torch
 from transformers import DistilBertTokenizer
 
+print("Entered the Python App!")
+
 def runprocess(command):
     return subprocess.Popen( command, shell=True, stdout=subprocess.PIPE ).communicate()[0].decode('unicode_escape').strip()
 

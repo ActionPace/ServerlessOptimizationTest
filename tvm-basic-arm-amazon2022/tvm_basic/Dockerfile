@@ -1,6 +1,6 @@
 # From local docker image
-# docker load < 
-FROM --platform=linux/arm64/v8 docker.io/arm64v8/amazonlinux:2022.0.20220531.0
+# docker load < amazonlinux2022.0.20220531.0-aarch-tvm-basicv1.tar.gz
+FROM amazonlinux2022.0.20220531.0-aarch-tvm-basic:v1
 
 ARG FUNCTION_DIR="/home/app/"
 ENV TRANSFORMERS_CACHE="/home/app/huggingface"

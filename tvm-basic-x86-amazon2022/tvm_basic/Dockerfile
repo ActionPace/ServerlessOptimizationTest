@@ -1,4 +1,4 @@
-FROM docker.io/library/amazonlinux:2022.0.20220531.0
+FROM amazonlinux2022.0.20220531.0-x86-basic:v1
 
 ARG FUNCTION_DIR="/home/app/"
 ENV TRANSFORMERS_CACHE="/home/app/huggingface"
@@ -6,8 +6,7 @@ ARG ARCH_RIE="x86_" # "arm" or "x86_"
 
 WORKDIR ${FUNCTION_DIR}
 COPY requirements.txt ${FUNCTION_DIR}
-RUN yum -y install findutils \
-&& python3 -m pip install -r requirements.txt -t . \
+RUN python3 -m pip install -r requirements.txt -t . \
 && python3 -m pip install awslambdaric --target ${FUNCTION_DIR}
 
 COPY *.py ${FUNCTION_DIR}

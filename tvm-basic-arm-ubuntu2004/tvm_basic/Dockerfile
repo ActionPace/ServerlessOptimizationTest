@@ -1,8 +1,7 @@
-FROM --platform=linux/arm64/v8 docker.io/arm64v8/ubuntu:focal-20220531
+FROM ubuntu20.04-aarch-tvm-basic:v1
 
 ARG FUNCTION_DIR="/home/app/"
 ENV TRANSFORMERS_CACHE="/home/app/huggingface"
-ARG SSL_FILE="libssl1.1_1.1.1f-1ubuntu2.16_arm64.deb"
 ARG ARCH_RIE="arm" # "arm" or "x86_"
 
 WORKDIR ${FUNCTION_DIR}

@@ -1,4 +1,4 @@
-FROM --platform=linux/arm64/v8 docker.io/arm64v8/ubuntu:jammy-20220531
+FROM ubuntu22.04-aarch-tvm-basic:v1
 
 ARG FUNCTION_DIR="/home/app/"
 ENV TRANSFORMERS_CACHE="/home/app/huggingface"
@@ -13,9 +13,7 @@ COPY *.py ${FUNCTION_DIR}
 RUN python3 prepare.py && rm /home/app/huggingface/* \
 && python3 prepare2.py
 
-COPY app.py ${FUNCTION_DIR}
-
-ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/download/v1.6/aws-lambda-rie-arm64 /usr/bin/aws-lambda-rie
+ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/download/v1.6/aws-lambda-rie-${ARCH_RIE}64 /usr/bin/aws-lambda-rie
 COPY entry.sh /
 RUN chmod 755 /usr/bin/aws-lambda-rie /entry.sh
 ENTRYPOINT [ "/entry.sh" ]

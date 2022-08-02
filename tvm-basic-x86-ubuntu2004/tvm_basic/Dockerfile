@@ -1,4 +1,4 @@
-FROM docker.io/library/ubuntu:focal-20220531
+FROM ubuntu20.04-x86-tvm-basic:v1
 
 ARG FUNCTION_DIR="/home/app/"
 ENV TRANSFORMERS_CACHE="/home/app/huggingface"
@@ -10,8 +10,7 @@ RUN python3 -m pip install -r requirements.txt -t . \
 && python3 -m pip install awslambdaric --target ${FUNCTION_DIR}
 
 COPY *.py ${FUNCTION_DIR}
-RUN python3 prepare.py \
-&& rm /home/app/huggingface/* \
+RUN python3 prepare.py && rm /home/app/huggingface/* \
 && python3 prepare2.py
 
 ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/download/v1.6/aws-lambda-rie-${ARCH_RIE}64 /usr/bin/aws-lambda-rie

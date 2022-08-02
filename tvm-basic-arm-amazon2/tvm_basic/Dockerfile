@@ -1,4 +1,4 @@
-FROM --platform=linux/arm64/v8 docker.io/arm64v8/amazonlinux:2.0.20220606.1
+FROM amazonlinux2.0.20220606.1-aarch-tvm-basic:v1
 
 ARG FUNCTION_DIR="/home/app/"
 ENV TRANSFORMERS_CACHE="/home/app/huggingface"

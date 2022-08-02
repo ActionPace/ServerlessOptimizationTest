@@ -1,10 +1,8 @@
-FROM docker.io/library/ubuntu:jammy-20220531
+FROM ubuntu22.04-x86-tvm-basic:v1
 
 ARG FUNCTION_DIR="/home/app/"
 ENV TRANSFORMERS_CACHE="/home/app/huggingface"
 ARG ARCH_RIE="x86_" # "arm" or "x86_"
-
-RUN apt -y update && apt-get -y install curl tar gzip
 
 WORKDIR ${FUNCTION_DIR}
 COPY requirements.txt ${FUNCTION_DIR}

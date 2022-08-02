@@ -1,3 +1,5 @@
+# From local docker image
+# docker load < amazonlinux2022.0.20220531.0-x86-basic.tar.gz
 FROM amazonlinux2022.0.20220531.0-x86-basic:v1
 
 ARG FUNCTION_DIR="/home/app/"

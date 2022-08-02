@@ -1,3 +1,5 @@
+# From local docker image
+# docker load < amazonlinux2.0.20220606.1-aarch-tvm-basicv1.tar.gz
 FROM amazonlinux2.0.20220606.1-aarch-tvm-basic:v1
 
 ARG FUNCTION_DIR="/home/app/"

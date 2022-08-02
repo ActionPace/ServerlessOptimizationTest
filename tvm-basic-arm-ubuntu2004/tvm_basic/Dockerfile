@@ -1,3 +1,5 @@
+# From local docker image
+# docker load < ubuntu20.04-aarch-tvm-basicv1.tar.gz
 FROM ubuntu20.04-aarch-tvm-basic:v1
 
 ARG FUNCTION_DIR="/home/app/"
@@ -6,7 +8,8 @@ ARG ARCH_RIE="arm" # "arm" or "x86_"
 
 WORKDIR ${FUNCTION_DIR}
 COPY requirements.txt ${FUNCTION_DIR}
-RUN python3 -m pip install -r requirements.txt -t . \
+RUN python3 -m pip install pip --upgrade \
+&& python3 -m pip install -r requirements.txt -t . \
 && python3 -m pip install awslambdaric --target ${FUNCTION_DIR}
 
 COPY *.py ${FUNCTION_DIR}

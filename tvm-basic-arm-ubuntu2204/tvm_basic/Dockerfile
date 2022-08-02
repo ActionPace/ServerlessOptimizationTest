@@ -1,3 +1,5 @@
+# From local docker image
+# docker load < ubuntu22.04-aarch-tvm-basicv1.tar.gz 
 FROM ubuntu22.04-aarch-tvm-basic:v1
 
 ARG FUNCTION_DIR="/home/app/"

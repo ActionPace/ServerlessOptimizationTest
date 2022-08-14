@@ -37,9 +37,16 @@ COPY --from=build /progs2/${FOLDER_NAME} .
 
 WORKDIR ${FUNCTION_DIR}
 COPY requirements.txt ${FUNCTION_DIR}
+#Need pytorch 1.12 for IPEX but it's currently the newest - in future will be
+#pip3 install torch-1.12.1+cpu torchaudio-0.12.1+cpu torchvision-0.13.1+cpu --extra-index-url https://download.pytorch.org/whl/cpu 
 RUN . /envscript/env.sh \
 && python3 -m pip install -r requirements.txt -t . \
-&& python3 -m pip install awslambdaric --target ${FUNCTION_DIR}
+&& python3 -m pip install awslambdaric --target ${FUNCTION_DIR} \
+&& pip3 uninstall torch torchaudio torchvision -y \
+&& pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cpu \
+#&& yum -y install util-linux \
+#&& python3 -m pip install intel_extension_for_pytorch \
+&& pip3 install optimum[onnxruntime] 
 
 COPY *.py ${FUNCTION_DIR}
 RUN . /envscript/env.sh \

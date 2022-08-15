@@ -15,6 +15,8 @@ Resources:
       PackageType: Image
       Architectures:
         - x86_64
+      ImageConfig:
+        Command: ["app.lambda_handler"]    
       Events:
         ServerInfo:
           Type: HttpApi
@@ -25,6 +27,45 @@ Resources:
       Dockerfile: Dockerfile
       DockerContext: ./tvm_small
       DockerTag: tvmsmallubuntu2004-v1
+
+  TvmSmallFunction2:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Architectures:
+        - x86_64
+      ImageConfig:
+        Command: ["app.lambda_handler2"]
+      Events:
+        ServerInfo:
+          Type: HttpApi
+          Properties:
+            Path: /tvmsmall2
+            Method: post
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: ./tvm_small
+      DockerTag: tvmsmallubuntu2004-v1
+  
+  TvmSmallFunction3:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Architectures:
+        - x86_64
+      ImageConfig:
+        Command: ["app.lambda_handler3"]
+      Events:
+        ServerInfo:
+          Type: HttpApi
+          Properties:
+            Path: /tvmsmall3
+            Method: post
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: ./tvm_small
+      DockerTag: tvmsmallubuntu2004-v1
+
 
 Outputs:
   TvmSmallApi:

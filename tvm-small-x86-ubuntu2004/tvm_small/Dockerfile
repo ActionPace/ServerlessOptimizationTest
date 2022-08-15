@@ -46,11 +46,20 @@ COPY --from=build /tmp/${SSL_FILE} .
 RUN dpkg -i ${SSL_FILE} \
 && rm ${SSL_FILE} 
 
+WORKDIR /usr/bin
+COPY lscpu .
+
 WORKDIR ${FUNCTION_DIR}
 COPY requirements.txt ${FUNCTION_DIR}
 RUN . /envscript/env.sh \
+&& chmod a+x /usr/bin/lscpu \
 && python3 -m pip install -r requirements.txt -t . \
-&& python3 -m pip install awslambdaric --target ${FUNCTION_DIR}
+&& python3 -m pip install awslambdaric==2.0.4 --target ${FUNCTION_DIR} \
+&& pip3 uninstall torch torchaudio torchvision -y \
+&& pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cpu \
+#&& apt-get -y install util-linux \
+&& python3 -m pip install intel_extension_for_pytorch==1.12.100 \
+&& pip3 install optimum[onnxruntime]==1.3.0 
 
 COPY *.py ${FUNCTION_DIR}
 RUN . /envscript/env.sh \

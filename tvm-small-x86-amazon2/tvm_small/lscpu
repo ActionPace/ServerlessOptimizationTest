@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+#echo `cat /proc/cpuinfo | grep 'model name' | tail -1 | cut -d':' -f2 | xargs`
+cores=`getconf _NPROCESSORS_ONLN`
+echo "Socket(s):           1"
+echo "Core(s) per socket:  ${cores}"

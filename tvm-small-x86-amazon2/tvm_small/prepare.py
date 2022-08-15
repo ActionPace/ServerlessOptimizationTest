@@ -2,7 +2,7 @@ from transformers import DistilBertTokenizer, DistilBertForSequenceClassificatio
 import torch
 import os
 
-#import intel_extension_for_pytorch as ipex
+import intel_extension_for_pytorch as ipex
 
 from optimum.onnxruntime import ORTModelForSequenceClassification
 
@@ -22,10 +22,10 @@ traced_model = torch.jit.trace(model, [input_ids, attention_mask])
 torch.jit.save(traced_model, "traced_bert.pt")
 
 #IPEX Model
-#model = ipex.optimize(model)
-#traced_model2 = torch.jit.trace(model, [input_ids, attention_mask])
-#traced_model2 = torch.jit.freeze(traced_model2)
-#torch.jit.save(traced_model2, "traced_bert2.pt")
+model = ipex.optimize(model)
+traced_model2 = torch.jit.trace(model, [input_ids, attention_mask])
+traced_model2 = torch.jit.freeze(traced_model2)
+torch.jit.save(traced_model2, "traced_bert2.pt")
 
 #ONNX Optimum
 onnx_path = "onnx"

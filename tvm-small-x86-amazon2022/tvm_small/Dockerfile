@@ -63,8 +63,9 @@ RUN . /envscript/env.sh \
 
 COPY *.py ${FUNCTION_DIR}
 RUN . /envscript/env.sh \
-&& python3 prepare.py && rm /home/app/huggingface/* \
-&& python3 prepare2.py
+&& python3 prepare.py 
+#&& rm /home/app/huggingface/* \
+#&& python3 prepare2.py
 
 ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/download/v1.6/aws-lambda-rie-${ARCH_RIE}64 /usr/bin/aws-lambda-rie
 COPY entry.sh /

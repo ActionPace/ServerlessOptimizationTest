@@ -9,6 +9,7 @@ from optimum.onnxruntime import ORTModelForSequenceClassification
 os.environ['TRANSFORMERS_CACHE'] = '/home/app'
 name = "distilbert-base-uncased-finetuned-sst-2-english"
 model = DistilBertForSequenceClassification.from_pretrained(name, torchscript=True)
+#Save to disk for later
 tokenizer = DistilBertTokenizer.from_pretrained(name)
 
 input_text="This movie was really horrible and I won't come again!"
@@ -32,3 +33,6 @@ onnx_path = "onnx"
 model2 = ORTModelForSequenceClassification.from_pretrained(name, from_transformers=True)
 model2.save_pretrained(onnx_path)
 tokenizer.save_pretrained(onnx_path)
+
+#Full Model
+model3 = DistilBertForSequenceClassification.from_pretrained(name)

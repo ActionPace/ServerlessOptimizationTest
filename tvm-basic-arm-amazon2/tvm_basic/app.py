@@ -10,12 +10,18 @@ name = "distilbert-base-uncased-finetuned-sst-2-english"
 tokenizer = DistilBertTokenizer.from_pretrained(name)
 loaded_model = torch.jit.load("traced_bert.pt")
 
-
 def lambda_handler(event, context):
     
     body = json.loads(event['body'])
 
     input_text = body['input_text']
+  
+    if "max_tokens" in body:
+        maxtokens = body["max_tokens"]
+        if maxtokens=="":
+            maxtokens="512"
+    else:
+        maxtokens="512"
 
     #type = runprocess("gcc -march=native -Q --help=target|grep march|grep -v 'Known valid'|awk '{print $2}'")
     type = runprocess("cat /proc/cpuinfo | grep 'model name' | tail -1 | cut -d':' -f2 | xargs")
@@ -33,7 +39,7 @@ def lambda_handler(event, context):
     start = time.time()
     
     #input_text="This movie was really horrible and I won't come again!"
-    inputs = tokenizer(input_text, padding="max_length", max_length=512, return_tensors="pt")
+    inputs = tokenizer(input_text, padding="max_length", max_length=int(maxtokens), return_tensors="pt")
     input_ids=torch.tensor(inputs["input_ids"].numpy())
     attention_mask=torch.tensor(inputs["attention_mask"].numpy())
     loaded_model.eval()
@@ -53,6 +59,7 @@ def lambda_handler(event, context):
                 "type": type,
                 "cores": cores,
                 "memorysize": memorysize,
+                "maxtokens": maxtokens,
                 "loadtime": loadtime,
                 "timerun": timerun,
                 "result": result,

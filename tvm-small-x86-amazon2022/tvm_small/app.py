@@ -10,7 +10,6 @@ from optimum.onnxruntime import ORTModelForSequenceClassification
 def runprocess(command):
     return subprocess.Popen( command, shell=True, stdout=subprocess.PIPE ).communicate()[0].decode('unicode_escape').strip()
 
-
 #os.environ['TRANSFORMERS_CACHE'] = '/home/app'
 name = "distilbert-base-uncased-finetuned-sst-2-english"
 tokenizer = DistilBertTokenizer.from_pretrained(name)

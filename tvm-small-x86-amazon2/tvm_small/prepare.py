@@ -24,15 +24,17 @@ torch.jit.save(traced_model, "traced_bert.pt")
 
 #IPEX Model
 model = ipex.optimize(model)
-traced_model2 = torch.jit.trace(model, [input_ids, attention_mask])
-traced_model2 = torch.jit.freeze(traced_model2)
+with torch.no_grad():
+    torch._C._jit_set_profiling_mode(False)
+    traced_model2 = torch.jit.trace(model, [input_ids, attention_mask])
+    traced_model2 = torch.jit.freeze(traced_model2)
 torch.jit.save(traced_model2, "traced_bert2.pt")
 
 #ONNX Optimum
 onnx_path = "onnx"
 model2 = ORTModelForSequenceClassification.from_pretrained(name, from_transformers=True)
 model2.save_pretrained(onnx_path)
-tokenizer.save_pretrained(onnx_path)
+#tokenizer.save_pretrained(onnx_path)
 
 #Full Model
 model3 = DistilBertForSequenceClassification.from_pretrained(name)

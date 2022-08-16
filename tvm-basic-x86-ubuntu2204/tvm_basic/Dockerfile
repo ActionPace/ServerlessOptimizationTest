@@ -9,7 +9,7 @@ ARG ARCH_RIE="x86_" # "arm" or "x86_"
 WORKDIR ${FUNCTION_DIR}
 COPY requirements.txt ${FUNCTION_DIR}
 RUN python3 -m pip install -r requirements.txt -t . \
-&& python3 -m pip install awslambdaric --target ${FUNCTION_DIR}
+&& python3 -m pip install awslambdaric==2.0.4 --target ${FUNCTION_DIR}
 
 COPY *.py ${FUNCTION_DIR}
 RUN python3 prepare.py && rm /home/app/huggingface/* \

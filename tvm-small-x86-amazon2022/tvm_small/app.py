@@ -126,6 +126,8 @@ def lambda_handler2(event, context):
     input_ids=torch.tensor(inputs["input_ids"].numpy())
     attention_mask=torch.tensor(inputs["attention_mask"].numpy())
     loaded_model.eval()
+    #Should be temporary until patch is applied in IPEX
+    loaded_model2 = torch.jit.load("traced_bert2.pt")
     loadtime = "{:.2f} ms".format((time.time() - start)*1000)
     start = time.time()
     
@@ -136,7 +138,8 @@ def lambda_handler2(event, context):
     ##IPEX
     #Workaround until IPEX is fixed
     #https://github.com/intel/intel-extension-for-pytorch/issues/240
-    loaded_model2 = torch.jit.load("traced_bert2.pt")
+    #Moved line back to load time area
+    #loaded_model2 = torch.jit.load("traced_bert2.pt")
     test_out = loaded_model2(input_ids,attention_mask)
     result="{}".format(test_out[0][0].detach().numpy())
    
